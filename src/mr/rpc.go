@@ -1,29 +1,45 @@
 package mr
 
-//
-// RPC definitions.
-//
-// remember to capitalize all names.
-//
+import (
+	"os"
+	"strconv"
+)
 
-import "os"
-import "strconv"
+type TaskType string
 
-//
-// example to show how to declare the arguments
-// and reply for an RPC.
-//
+var MapTaskType = TaskType("map")
+var ReduceTaskType = TaskType("reduce")
 
-type ExampleArgs struct {
-	X int
+type FetchMapTaskRequest struct {
+	WorkerID string
 }
 
-type ExampleReply struct {
-	Y int
+// empty filename indicates no available map task atm
+type FetchMapTaskResponse struct {
+	Available bool
+	ID        int
+	Filename  string
+	NReduce   int
 }
 
-// Add your RPC definitions here.
+type TaskCompletedRequest struct {
+	Type     TaskType
+	WorkerID string
+	TaskID   int
+}
 
+type TaskCompletedResponse struct {
+	Acknowledged bool
+}
+
+type FetchReduceTaskRequest struct {
+	WorkerID string
+}
+
+type FetchReduceTaskResponse struct {
+	Available bool
+	ID        int
+}
 
 // Cook up a unique-ish UNIX-domain socket name
 // in /var/tmp, for the master.
